@@ -1,8 +1,18 @@
+require_relative 'transition'
+
 class Machine
     def initialize accept_states, transition_rules
         @accept_states = accept_states
+        @alphabet = []
         @start_state = 0
-        @transition_rules = transition_rules
+        @transition_rules = []
+        transition_rules.each do |string| 
+            transition = Transition.new(string)
+            @transition_rules.push(transition)
+            if !@alphabet.include? transition.input_char then
+                @alphabet.push transition.input_char
+            end
+        end
         @trap_state = 255
         @states = @accept_states + [@start_state, @trap_state]
     end
