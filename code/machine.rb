@@ -5,6 +5,7 @@ class Machine
         @accept_states = accept_states
         @alphabet = []
         @start_state = 0
+        @states = @accept_states + [@start_state]
         @transition_rules = []
         transition_rules.each do |string| 
             transition = Transition.new(string)
@@ -12,9 +13,11 @@ class Machine
             if !@alphabet.include? transition.input_char then
                 @alphabet.push transition.input_char
             end
+            @states.push transition.current_state, transition.end_state
         end
         @trap_state = 255
-        @states = @accept_states + [@start_state, @trap_state]
+        @states.push @trap_state
+        @states.uniq!
     end
     
     def isValid?
