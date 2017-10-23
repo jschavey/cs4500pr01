@@ -38,3 +38,26 @@ RSpec.describe Machine do
         end
     end
 end
+
+RSpec.describe Machine, "#isNFA?" do
+    it 'is an NFA if there are epsilon transitions' do
+        machine = Machine.new([1,4],['0,,1'])
+        expect(machine.isNFA?).to be_truthy
+    end
+    
+    it 'is and NFA if there are transitions with duplicate current state/input character combination' do
+        machine = Machine.new([],['0,1,1', '0,1,2'])
+        expect(machine.isNFA?).to be_truthy
+    end
+    
+    it 'is not an NFA if it is not a valid automaton' do
+        machine = Machine.new([],[])
+        machine.instance_variable_set(:@start_state, 42)
+        expect(machine.isNFA?).to be_falsey
+    end
+    
+    it 'is not an NFA if it is a valid DFA' do
+        machine = Machine.new([],[])
+        expect(machine.isNFA?).to be_falsey
+    end
+end

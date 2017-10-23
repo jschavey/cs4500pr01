@@ -15,9 +15,31 @@ class Machine
             end
             @states.push transition.current_state, transition.end_state
         end
+        #@alphabet.uniq!
         @trap_state = 255
         @states.push @trap_state
         @states.uniq!
+    end
+    
+    # per instruction
+    # is true if is valid automaton 
+    #  and has epsilon transitions
+    #  or has multiple transitions with the same current_state and input_char
+    def isNFA?
+        if isValid? then 
+            if @alphabet.include? "" then
+                return true
+            else
+                combo = []
+                @transition_rules.each do |transition|
+                    combo.push([transition.current_state, transition.input_char])
+                    if combo.count != combo.uniq.count then
+                        return true 
+                    end
+                end
+            end
+        end
+        return false
     end
     
     def isValid?
