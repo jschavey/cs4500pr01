@@ -5,7 +5,9 @@ require_relative "machine"
     count = 0
     states = ""
     transitions = Array.new
-    File.readlines("../data/fa#{num}.fa").each do |line|
+    accept_file = File.open("results/fa#{num}.acc", "w")
+    reject_file = File.open("results/fa#{num}.rej", "w")
+    File.readlines("data/fa#{num}.fa").each do |line|
         if count === 0 then
             states = line
         else
@@ -15,7 +17,7 @@ require_relative "machine"
     end
     
     input_strings = Array.new
-    File.readlines("../data/fa#{num}.in").each do |line|
+    File.readlines("data/fa#{num}.in").each do |line|
         input_strings.push line
     end
     
@@ -24,7 +26,7 @@ require_relative "machine"
 
     machine = Machine.new states, transitions
     
-    log_file = File.open "../results/fa#{num}.log", "w"
+    log_file = File.open "results/fa#{num}.log", "w"
     log_file.puts "Alphabet: [#{machine.instance_variable_get("@alphabet").join}]"
     log_file.puts "States: #{machine.instance_variable_get("@states").count}"
     log_file.puts "Valid: #{machine.type}"
@@ -38,8 +40,10 @@ require_relative "machine"
     
     input_strings.each do |string|
         if machine.decide string then
+            accept_file.puts string
             accepted += 1
         else
+            reject_file.puts string
             rejected += 1
         end
     end

@@ -5,6 +5,7 @@ class Machine
         @accept_states = accept_states
         @alphabet = []
         @start_state = 0
+        @current_state = @start_state
         @states = @accept_states + [@start_state]
         @transition_rules = []
         transition_rules.each do |string| 
@@ -23,7 +24,19 @@ class Machine
     
     # given a string return true or false if in the language or not
     def decide string
-        false
+        string.each_char do |c|
+            @transition_rules.each do |rule|
+                if rule.input_char === c && rule.current_state === @current_state
+                    @current_state = rule.end_state
+                end
+            end
+        end
+        
+        if @accept_states.include? @current_state then
+            return true
+        else
+            return false
+        end
     end
     
     # per instruction
