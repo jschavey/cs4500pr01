@@ -17,8 +17,13 @@ class Machine
         end
         #@alphabet.uniq!
         @trap_state = 255
-        @states.push @trap_state
+        #@states.push @trap_state
         @states.uniq!
+    end
+    
+    # given a string return true or false if in the language or not
+    def decide string
+        false
     end
     
     # per instruction
@@ -53,6 +58,16 @@ class Machine
             false
         else
             true
+        end
+    end
+    
+    def type
+        if !isValid? then
+            return "INVALID"
+        elsif isNFA? then
+            return "NFA"
+        else
+            return "DFA"
         end
     end
 end

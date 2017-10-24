@@ -1,19 +1,6 @@
 require_relative "machine"
 
-accept_states_string = "{3,4,5}"
-
-transition_rule_strings = []
-transition_rule_strings.push '1, ,3'
-transition_rule_strings.push '1,0,1'
-transition_rule_strings.push '0, ,1'
-
-machine = Machine.new [0,1], transition_rule_strings
-
-puts machine.inspect
-puts machine.isValid?
-puts machine.isNFA?
-
-(1...15).each do |i|
+(0...15).each do |i|
     num = i.to_s.rjust(2, '0')
     count = 0
     states = ""
@@ -27,11 +14,36 @@ puts machine.isNFA?
         count += 1
     end
     
+    input_strings = Array.new
+    File.readlines("../data/fa#{num}.in").each do |line|
+        input_strings.push line
+    end
+    
     states.delete! "{}"
-    
-    states = Array.new states.to_i
-    
+    states = states.split(",").map(&:to_i)
+
     machine = Machine.new states, transitions
     
-    print machine.instance_variable_get "@alphabet"
+    log_file = File.open "../results/fa#{num}.log", "w"
+    log_file.puts "Alphabet: [#{machine.instance_variable_get("@alphabet").join}]"
+    log_file.puts "States: #{machine.instance_variable_get("@states").count}"
+    log_file.puts "Valid: #{machine.type}"
+    
+    if !machine.isValid? || machine.isNFA? then next end    # per instruction, skip invalids or NFAs
+    
+    log_file.puts "Strings: #{input_strings.count}"
+    
+    accepted = 0
+    rejected = 0
+    
+    input_strings.each do |string|
+        if machine.decide string then
+            accepted += 1
+        else
+            rejected += 1
+        end
+    end
+    
+    log_file.puts "Accepted: #{accepted}"
+    log_file.puts "Rejected: #{rejected}"
 end
