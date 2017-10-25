@@ -25,13 +25,23 @@ class Machine
     # given a string return true or false if in the language or not
     def decide string
         string.each_char do |c|
+            if !@alphabet.include? c then
+                return false
+            end
+            transition = false
             @transition_rules.each do |rule|
-                if rule.input_char === c && rule.current_state === @current_state
-                    @current_state = rule.end_state
+                if rule.input_char === c && rule.current_state === @current_state then
+                    transition = rule
+                    break
                 end
             end
+            if !transition then 
+                return false
+            else
+                @current_state = transition.end_state
+            end
         end
-        
+
         if @accept_states.include? @current_state then
             return true
         else
