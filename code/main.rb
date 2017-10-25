@@ -39,6 +39,7 @@ require_relative "machine"
     rejected = 0
     
     input_strings.each do |string|
+        string.strip!
         if machine.decide string then
             accept_file.puts string
             accepted += 1
@@ -47,6 +48,7 @@ require_relative "machine"
             rejected += 1
         end
     end
+    
     
     log_file.puts "Accepted: #{accepted}"
     log_file.puts "Rejected: #{rejected}"
