@@ -1,0 +1,6 @@
+Alphabet: [ab]
+States: 5
+Valid: NFA
+Strings: 10000
+Accepted: 0
+Rejected: 10000

@@ -2,5 +2,5 @@ Alphabet: [0123456789]
 States: 100
 Valid: DFA
 Strings: 1000
-Accepted: 60
-Rejected: 940
+Accepted: 62
+Rejected: 938

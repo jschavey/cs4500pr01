@@ -24,6 +24,7 @@ class Machine
     
     # given a string return true or false if in the language or not
     def decide string
+        @current_state = @start_state
         string.each_char do |c|
             if !@alphabet.include? c then
                 return false
